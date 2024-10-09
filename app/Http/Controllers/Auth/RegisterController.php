@@ -26,11 +26,10 @@ class RegisterController extends Controller
     //Laravelのユーザー登録に関連する標準的な機能を提供するトレイト
 
     //ユーザー登録後にどのURLにリダイレクトするか
-    protected function redirectTo()
+    protected function registered(Request $request, $user)
     {
-        \Log::info('Redirecting to /login');
-        //リダイレクト前にログメッセージを記録
-        return '/login';
+        // ユーザー登録完了後に完了画面へリダイレクト
+        return redirect()->route('register.complete');
     }
 
 
@@ -44,8 +43,8 @@ class RegisterController extends Controller
 
         event(new Registered($user));
 
-        return redirect($this->redirectPath());
-        //すぐ上でredirectTo()メソッドでloginに行くよう設定済み
+        return redirect()->route('register.complete')->with('user', $user);
+        //ユーザーの名前を渡し、登録完了画面へ
     }
     /**
      * Where to redirect users after registration.

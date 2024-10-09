@@ -14,7 +14,7 @@
       <!-- フォームが送信される際に、リクエストが送信されるURLをposts.searchに指定 -->
       <!-- name="keyword"は、フォームが送信されたときにサーバー側でこのフィールドの値を識別するため -->
       <!-- placeholder="検索キーワード"は、入力フィールドが空のときに表示されるガイドテキストを指定 -->
-      <!-- value="{{ request('keyword')は、ユーザーが入力した検索キーワードがフォームに残った状態になる -->
+      <!-- value="{{ request('keyword')}}"は、ユーザーが入力した検索キーワードがフォームに残った状態になる -->
       <form action="{{ route('posts.search') }}" method="GET">
     <input type="text" name="keyword" placeholder="検索キーワード" value="{{ request('keyword') }}">
     <button type="submit">検索</button>
@@ -41,7 +41,7 @@
 
           @if ($list->id === Auth::id())
           <!-- ログインユーザーが投稿の所有者の場合のみ、更新・削除ボタンを表示。$list->idでどのユーザーの情報か判断。Auth::id()で現在ログインしているユーザーのidを取得し、識別 -->
-          <td><a class="btn btn-primary" href="/post/{{ $list->id }}/update-form">更新</a></td>
+          <td><a class="btn btn-primary" href="/post/{{ $list->id }}/update-form">編集</a></td>
           <!-- $list->idが投稿id -->
 
           <td><a class="btn btn-danger" href="/post/{{ $list->id }}/delete"

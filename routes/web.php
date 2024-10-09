@@ -7,8 +7,15 @@ use Illuminate\Http\Request;
 
 // ルートURLにアクセスされたときにログインページにリダイレクト
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route('login');  // ログインページにリダイレクト
 });
+
+// ユーザー新規登録を行った後、ユーザーの名前情報を渡しながら、登録完了画面へ
+Route::get('/register/complete', function () {
+    // セッションからユーザー情報を取得
+    $user = session('user');
+    return view('register_complete', compact('user'));
+})->name('register.complete');
 
 //第一引数'index'の場合、~8000/indexを指す
 //第二引数は、リクエストが来たときに実行するcontrollerとメソッドを指定。indexにgetリクエストが来たときに、このメソッドが実行される
@@ -43,5 +50,3 @@ Route::post('/logout', function () {
 
 //ユーザー認証に関連する一連のルートを自動的に登録するためのもの
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
