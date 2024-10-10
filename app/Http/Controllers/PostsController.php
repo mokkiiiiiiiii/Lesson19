@@ -118,7 +118,7 @@ class PostsController extends Controller
     //idカラムが$idに一致する投稿を検索、1件のレコードを取得し、このレコードが$postという変数に格納
     $post = DB::table('posts')->where('id', $id)->first();
     //ログインユーザーが投稿の作成者であるか確認
-    if ($post->id !== Auth::id()) {
+    if ($post->user_id !== Auth::id()) {
         abort(403, 'Unauthorized action.');
         //権限がない場合は403エラー
     }
