@@ -39,7 +39,7 @@
           <td>{{ $list->created_at }}</td>
           <!-- 個々の情報の表示 -->
 
-          @if ($list->id === Auth::id())
+          @if ($list->user_id === Auth::id())
           <!-- ログインユーザーが投稿の所有者の場合のみ、更新・削除ボタンを表示。$list->idでどのユーザーの情報か判断。Auth::id()で現在ログインしているユーザーのidを取得し、識別 -->
           <td><a class="btn btn-primary" href="/post/{{ $list->id }}/update-form">編集</a></td>
           <!-- $list->idが投稿id -->
