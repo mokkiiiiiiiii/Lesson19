@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 //認証システムへのアクセス
 
 
+// 不要なProfileテーブルを作成してしまった対のコントローラー。後に削除
+
 
 class ProfileController extends Controller
 {

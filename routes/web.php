@@ -3,11 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
 <<<<<<< HEAD
+<<<<<<< HEAD
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FollowController;
 =======
 use App\Http\Controllers\ProfileController;
 >>>>>>> e3e65eaba9da27f56a4de0e89aa96dd7c1044175
+=======
+use App\Http\Controllers\HomeController;
+// use App\Http\Controllers\ProfileController;
+>>>>>>> bf17d81fbee40860027e5717cb32a7542621ca98
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -69,8 +74,8 @@ Route::post('/logout', function () {
 
 
 
-// プロフィールへのルート設定。
-Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+// プロフィールへのルート設定。不要なので後に削除
+// Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
 
 

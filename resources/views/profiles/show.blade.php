@@ -1,3 +1,6 @@
+<!-- 不要なProfileテーブルを作成した時の外部ビュー。後に削除。 -->
+
+
 @extends('layouts.app')
 
 @section('content')
