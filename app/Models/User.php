@@ -41,4 +41,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+    //     ProfileモデルでUserモデルを参照させる為に記述。
+    //     hasOneは「一対一」のリレーションシップを示し、1つのユーザーが1つのプロフィールを持つことを意味する。
+    //     $profile->user でユーザーにアクセス
+    // 　　$user->profile でプロフィールにアクセス
+    // 別でProfileを作ってしまった時の誤りなので、ここが邪魔をするなら後に削除
+
 }

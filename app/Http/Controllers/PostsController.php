@@ -14,21 +14,27 @@ use App\Models\Post;
 class PostsController extends Controller
 //HTTPリクエストに対してどのような処理を行うかを定義
 {
-    public function __construct()
-    {
+  public function __construct()
+  {
     $this->middleware('auth');
     //middleware('auth') を呼び出し、このコントローラーのすべてのアクションに対してauthミドルウェアが適用され、ログインしているユーザーだけがアクセスできるようになる
     //ミドルウェアを適用とは、HTTPリクエストがコントローラーのアクションに到達する前に、リクエストに対して特定の処理を実行することを意味
-    }
+  }
 
 
   public function index()
   {
     $list = DB::table('posts')->get();
     //DB::table('posts')で、postsテーブルのデータを指定し、->get();でデータを取得
-    return view('posts.index',['lists'=>$list]);
+    $user = Auth::user();
+
+    return view('posts.index', [
+      'lists' => $list,
+      'user' => $user
+    ]);
   }  //postsディレクトリの中にあるindex.blade.phpを呼び出す
   //コントローラからビューへ値を渡す。$listという変数を"lists"という名前でビューに渡す。
+  // ユーザー情報をビューに渡す為追記。
 
 
   public function createForm()
@@ -41,26 +47,26 @@ class PostsController extends Controller
     //newPostフィールドが以下の条件を満たしているかチェック
     $request->validate([
       'newPost' => [
-            'required',  //入力必須
-            'string',  //文字列
-            'max:100',  //100文字以内
-            'regex:/\S+/',  // スペースのみの入力を無効
-        ],
-      ], [
-        'contents.required' => '投稿内容は必須項目です。',
-        'contents.max' => '投稿内容は100文字以内で入力してください。',
-        'upPost.regex' => '投稿内容には空白以外の文字を含めてください。',
+        'required',  //入力必須
+        'string',  //文字列
+        'max:100',  //100文字以内
+        'regex:/\S+/',  // スペースのみの入力を無効
+      ],
+    ], [
+      'contents.required' => '投稿内容は必須項目です。',
+      'contents.max' => '投稿内容は100文字以内で入力してください。',
+      'upPost.regex' => '投稿内容には空白以外の文字を含めてください。',
     ]);
     //ユーザーが入力した投稿内容を取得、取得されたデータは $post変数に格納
     $post = $request->input('newPost');
 
     //取得した投稿内容が、データベースのpostsテーブルに挿入
     DB::table('posts')->insert([
-    'contents' => $post,
-    'user_name' => Auth::user()->name,
-    'user_id' => Auth::id(),
-    'created_at' => now(),
-    'updated_at' => now(),
+      'contents' => $post,
+      'user_name' => Auth::user()->name,
+      'user_id' => Auth::id(),
+      'created_at' => now(),
+      'updated_at' => now(),
     ]);
     return redirect('/index');
   }
@@ -70,28 +76,28 @@ class PostsController extends Controller
   public function updateForm($id)
   {
     $post = DB::table('posts')
-    ->where('id', $id)  //指定されたidを持つ投稿を検索
-    ->first();  //idが一致する投稿が1件だけ取得
+      ->where('id', $id)  //指定されたidを持つ投稿を検索
+      ->first();  //idが一致する投稿が1件だけ取得
     return view('posts.updateForm', ['post' => $post]);
     //updateFormへ。ビュー内でpostという変数を使って、特定の投稿のデータにアクセス
   }
 
   public function update(Request $request)
   {
-  $id = $request->input('id');
+    $id = $request->input('id');
 
     //upPostフィールドが以下の条件を満たしているかチェック
     $request->validate([
-        'upPost' => [
-            'required',  //入力必須
-            'string',  //文字列
-            'max:100',  //100文字以内
-            'regex:/\S+/',  // スペースのみの入力を無効
-        ],
+      'upPost' => [
+        'required',  //入力必須
+        'string',  //文字列
+        'max:100',  //100文字以内
+        'regex:/\S+/',  // スペースのみの入力を無効
+      ],
     ], [
-        'upPost.required' => '投稿内容は必須項目です。',
-        'upPost.max' => '投稿内容は100文字以内で入力してください。',
-        'upPost.regex' => '投稿内容には空白以外の文字を含めてください。',
+      'upPost.required' => '投稿内容は必須項目です。',
+      'upPost.max' => '投稿内容は100文字以内で入力してください。',
+      'upPost.regex' => '投稿内容には空白以外の文字を含めてください。',
     ]);
 
     //ユーザーが入力した投稿内容を取得、取得されたデータは $up_post変数に格納
@@ -100,49 +106,49 @@ class PostsController extends Controller
     $post = DB::table('posts')->where('id', $id)->first();
 
     if ($post->id !== Auth::id()) {  // ログインユーザーが投稿の作成者であるか確認
-        abort(403, 'Unauthorized action.');  // 権限がない場合は403エラー
+      abort(403, 'Unauthorized action.');  // 権限がない場合は403エラー
 
     }
 
     DB::table('posts')
-    ->where('id', $id)  //指定されたidを持つ投稿を検索
-    ->update(
-    ['contents' => $up_post]
-    );  //contentsカラムが、フォームで入力した新しい内容（$up_post）に更新される
+      ->where('id', $id)  //指定されたidを持つ投稿を検索
+      ->update(
+        ['contents' => $up_post]
+      );  //contentsカラムが、フォームで入力した新しい内容（$up_post）に更新される
     return redirect('/index');
   }
 
 
-    public function delete($id)
-   {
+  public function delete($id)
+  {
     //idカラムが$idに一致する投稿を検索、1件のレコードを取得し、このレコードが$postという変数に格納
     $post = DB::table('posts')->where('id', $id)->first();
     //ログインユーザーが投稿の作成者であるか確認
     if ($post->user_id !== Auth::id()) {
-        abort(403, 'Unauthorized action.');
-        //権限がない場合は403エラー
+      abort(403, 'Unauthorized action.');
+      //権限がない場合は403エラー
     }
 
     DB::table('posts')
-    ->where('id', $id)  //指定されたidを持つ投稿を検索
-    ->delete();
+      ->where('id', $id)  //指定されたidを持つ投稿を検索
+      ->delete();
     return redirect('/index');
   }
 
 
-    public function search(Request $request)
-    {
-        //フォームから送信された検索キーワードを取得
-        $keyword = $request->input('keyword');
-        // キーワードが入力されている場合のみ部分一致検索を実行。contentsカラムの値が検索キーワードを含むレコードをすべて取得
-        $lists = Post::where('contents', 'LIKE', '%' . $keyword . '%')->get();
+  public function search(Request $request)
+  {
+    //フォームから送信された検索キーワードを取得
+    $keyword = $request->input('keyword');
+    // キーワードが入力されている場合のみ部分一致検索を実行。contentsカラムの値が検索キーワードを含むレコードをすべて取得
+    $lists = Post::where('contents', 'LIKE', '%' . $keyword . '%')->get();
 
-        // 検索結果が空かどうか確認し、該当する投稿がない場合はposts.indexビューを表示し、messageという変数に「検索結果は0件です。」というメッセージを渡す
-        if ($lists->isEmpty()) {
-        return view('posts.index', ['message' => '検索結果は0件です。']);
-        }
-
-        // 検索結果が存在する場合、リスト（$lists）を渡す
-        return view('posts.index', ['lists' => $lists]);
+    // 検索結果が空かどうか確認し、該当する投稿がない場合はposts.indexビューを表示し、messageという変数に「検索結果は0件です。」というメッセージを渡す
+    if ($lists->isEmpty()) {
+      return view('posts.index', ['message' => '検索結果は0件です。']);
     }
+
+    // 検索結果が存在する場合、リスト（$lists）を渡す
+    return view('posts.index', ['lists' => $lists]);
+  }
 }
