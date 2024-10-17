@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+
+
 
 // ルートURLにアクセスされたときにログインページにリダイレクト
 Route::get('/', function () {
@@ -50,10 +53,10 @@ Route::post('/logout', function () {
 
 
 // プロフィールへのルート設定。
-Route::get()
+// Route::get()
 
 
 
 
-//ユーザー認証に関連する一連のルートを自動的に登録するためのもの
+// //ユーザー認証に関連する一連のルートを自動的に登録するためのもの
 Auth::routes();
