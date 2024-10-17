@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -53,7 +54,7 @@ Route::post('/logout', function () {
 
 
 // プロフィールへのルート設定。
-// Route::get()
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 
 
 

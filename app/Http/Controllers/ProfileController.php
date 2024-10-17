@@ -16,9 +16,16 @@ use Illuminate\Support\Facades\Auth;
 class ProfileController extends Controller
 {
     //
-    public function show($id)
+    public function show()
     {
-        $profile = Profile::('user_id', $id) -> firstOrFail();
-        return view('profile.show', compact('profile'));
+        $user = auth()->id();
+
+        $profile = Profile::where('user_id', $user)->first();
+
+        // if (!$profile) {
+        //     abort(404, 'プロフィールが見つかりません');
+        // }
+
+        return view('profiles.show', compact('profile'));
     }
 }
