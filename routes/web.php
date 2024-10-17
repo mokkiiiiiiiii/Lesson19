@@ -48,5 +48,12 @@ Route::post('/logout', function () {
 })->name('logout');
 
 
+
+// プロフィールへのルート設定。
+Route::get()
+
+
+
+
 //ユーザー認証に関連する一連のルートを自動的に登録するためのもの
 Auth::routes();

@@ -16,4 +16,9 @@ use Illuminate\Support\Facades\Auth;
 class ProfileController extends Controller
 {
     //
+    public function show($id)
+    {
+        $profile = Profile::('user_id', $id) -> firstOrFail();
+        return view('profile.show', compact('profile'));
+    }
 }

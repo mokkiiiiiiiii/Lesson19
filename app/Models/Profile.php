@@ -17,3 +17,4 @@ class Profile extends Model
     }
 }
 //ユーザーのプロフィール情報管理する為に作成。
+// belongsToはEloquentを使用して、ProfileのモデルがUserモデルに「従属している」＝　Prfolieモデルのデータベーステーブルに、UserテーブルのIDを保存する**外部キー（通常は user_id）**があり、ProfileはUserに属するという構造。
