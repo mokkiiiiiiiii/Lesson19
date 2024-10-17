@@ -2,9 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
+<<<<<<< HEAD
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FollowController;
+=======
+use App\Http\Controllers\ProfileController;
+>>>>>>> e3e65eaba9da27f56a4de0e89aa96dd7c1044175
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
+
 
 
 // ルートURLにアクセスされたときにログインページにリダイレクト
@@ -61,5 +68,12 @@ Route::post('/logout', function () {
 })->name('logout');
 
 
-//ユーザー認証に関連する一連のルートを自動的に登録するためのもの
+
+// プロフィールへのルート設定。
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+
+
+
+
+// //ユーザー認証に関連する一連のルートを自動的に登録するためのもの
 Auth::routes();
