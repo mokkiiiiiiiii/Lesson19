@@ -9,7 +9,12 @@
 
     <div class='container'>
       <!-- /create-formへ -->
-      <p class="pull-right"><a class="btn btn-success" href="/create-form">投稿する</a></p>
+      <p class="pull-right">
+        <a class="btn btn-success" href="/create-form">投稿する</a>
+      </p>
+      <p class="pull-right">
+        <a class="btn btn-primary" href="{{ route('users.index') }}">ユーザー検索</a>
+      </p>
 
       <!-- フォームが送信される際に、リクエストが送信されるURLをposts.searchに指定 -->
       <!-- name="keyword"は、フォームが送信されたときにサーバー側でこのフィールドの値を識別するため -->

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FollowController;
 use Illuminate\Http\Request;
 
 
@@ -38,6 +40,17 @@ Route::get('post/{id}/delete', [PostsController::class, 'delete']);
 
 //検索ボタン押下時このルートが実行される。PostsControllerのメソッドを実行するよう指定
 Route::get('/posts/search', [PostsController::class, 'search'])->name('posts.search');
+
+//ユーザー検索ボタン押下時にユーザー検索画面(ユーザー一覧)へ遷移する
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+//検索ボタン押下時このルートが実行される。UsersControllerのメソッドを実行するよう指定
+Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+
+// フォローのアクション
+Route::post('/follow/{user}', [FollowController::class, 'follow'])->name('follow');
+
+Route::get('/follow-list', [FollowController::class, 'followList'])->name('follow.list');
 
 //postリクエストによりルートに定義された処理が実行
 //Auth::logoutで、Laravelの認証システムを使って現在ログインしているユーザーをログアウト

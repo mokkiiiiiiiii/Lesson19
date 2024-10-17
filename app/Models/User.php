@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -12,10 +11,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $primaryKey = 'user_id'; // Primary Key を 'user_id' に指定
+
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * Mass-assignable attributes.
      */
     protected $fillable = [
         'name',
@@ -24,9 +23,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
+     * Hidden attributes.
      */
     protected $hidden = [
         'password',
@@ -34,11 +31,60 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
+     * Attribute casting.
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * ユーザーがフォローしているユーザーたちとのリレーション
+     */
+    public function followees()
+    {
+    return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followee_id')
+                ->distinct(); // 重複排除
+    }
+
+
+    /**
+     * ユーザーをフォローしているユーザーたちとのリレーション
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'follows',
+            'followee_id',
+            'follower_id'
+        );
+    }
+
+    /**
+     * ユーザーをフォローする
+     */
+    public function follow(User $user)
+    {
+        if ($this->user_id !== $user->user_id && !$this->isFollowing($user)) {
+            $this->followees()->attach($user->user_id);
+        }
+    }
+
+    /**
+     * フォローを解除する
+     */
+    public function unfollow(User $user)
+    {
+        if ($this->isFollowing($user)) {
+            $this->followees()->detach($user->user_id);
+        }
+    }
+
+    /**
+     * 指定ユーザーをフォローしているか確認
+     */
+    public function isFollowing(User $user)
+    {
+        return $this->followees()->where('followee_id', $user->user_id)->exists();
+    }
 }

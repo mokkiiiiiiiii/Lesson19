@@ -14,7 +14,7 @@ class RenameContentsColumnInPostsTable extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->renameColumn('post', 'contents'); // カラム名の変更
+            $table->renameColumn('posts', 'contents'); // カラム名の変更
         });
     }
 
@@ -26,7 +26,7 @@ class RenameContentsColumnInPostsTable extends Migration
     public function down()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->renameColumn('post_content', 'contents'); // 元に戻す場合
+            $table->renameColumn('contents', 'posts'); // 元に戻す場合
         });
     }
 }

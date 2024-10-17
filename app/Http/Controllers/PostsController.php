@@ -99,7 +99,7 @@ class PostsController extends Controller
 
     $post = DB::table('posts')->where('id', $id)->first();
 
-    if ($post->id !== Auth::id()) {  // ログインユーザーが投稿の作成者であるか確認
+    if (!$post || $post->user_id !== Auth::id()) {  // ログインユーザーが投稿の作成者であるか確認
         abort(403, 'Unauthorized action.');  // 権限がない場合は403エラー
 
     }
