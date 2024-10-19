@@ -37,7 +37,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-<<<<<<< HEAD
     /**
      * ユーザーがフォローしているユーザーたちとのリレーション
      */
@@ -88,7 +87,6 @@ class User extends Authenticatable
     {
         return $this->followees()->where('followee_id', $user->user_id)->exists();
     }
-=======
 
     public function profile()
     {
@@ -100,5 +98,4 @@ class User extends Authenticatable
     // 　　$user->profile でプロフィールにアクセス
     // 別でProfileを作ってしまった時の誤りなので、ここが邪魔をするなら後に削除
 
->>>>>>> bf17d81fbee40860027e5717cb32a7542621ca98
 }

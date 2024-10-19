@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 
 <html>
-
-<<<<<<< HEAD
+  <body>
+  @extends('layouts.app')
+  <!-- 親テンプレートとして継承。複数のページで共通のレイアウト（layouts/app.blade.php） -->
+  @section('content')
+  <!-- app.balde.php内の@yield('content')で指定されている箇所に、設定したコードを反映 -->
     <div class='container'>
       <!-- /create-formへ -->
       <p class="pull-right">
@@ -11,28 +14,6 @@
       <p class="pull-right">
         <a class="btn btn-primary" href="{{ route('users.index') }}">ユーザー検索</a>
       </p>
-=======
-<body>
-  @extends('layouts.app')
-  <!-- 親テンプレートとして継承。複数のページで共通のレイアウト（layouts/app.blade.php） -->
-  @section('content')
-  <!-- app.balde.php内の@yield('content')で指定されている箇所に、設定したコードを反映 -->
->>>>>>> bf17d81fbee40860027e5717cb32a7542621ca98
-
-  <div class='container'>
-    <!-- /create-formへ -->
-
-    ここにプロフィールを挿入する
-    <h1>プロフィール</h1>
-    @if($user)
-    <p>名前：{{ $user->name }}</p>
-    <p></p>
-    <p></p>
-    @else
-    <p>ユーザーはログインしていません</p>
-    @endif
-
-    <p class="pull-right"><a class="btn btn-success" href="/create-form">投稿する</a></p>
 
     <!-- フォームが送信される際に、リクエストが送信されるURLをposts.searchに指定 -->
     <!-- name="keyword"は、フォームが送信されたときにサーバー側でこのフィールドの値を識別するため -->
