@@ -60,7 +60,11 @@ Route::get('/users/search', [UserController::class, 'search'])->name('users.sear
 // フォローのアクション
 Route::post('/follow/{user}', [FollowController::class, 'follow'])->name('follow');
 
+Route::post('/unfollow/{user}', [FollowController::class, 'unfollow'])->name('unfollow');
+
 Route::get('/follow-list', [FollowController::class, 'followList'])->name('follow.list');
+
+Route::get('/follower-list', [FollowController::class, 'followerList'])->name('follower.list');
 
 //postリクエストによりルートに定義された処理が実行
 //Auth::logoutで、Laravelの認証システムを使って現在ログインしているユーザーをログアウト
