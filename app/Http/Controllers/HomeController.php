@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,6 +28,9 @@ class HomeController extends Controller
 
         $user = Auth::user();
         // 認証ユーザーを取得。
-        return view('home.index', compact('user'));
+
+        $posts = $user->posts()->get();
+
+        return view('home.index', compact('user', 'posts'));
     }
 }

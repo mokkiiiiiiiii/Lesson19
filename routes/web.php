@@ -2,27 +2,34 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FollowController;
-=======
 use App\Http\Controllers\ProfileController;
->>>>>>> e3e65eaba9da27f56a4de0e89aa96dd7c1044175
-=======
+
 use App\Http\Controllers\HomeController;
-// use App\Http\Controllers\ProfileController;
->>>>>>> bf17d81fbee40860027e5717cb32a7542621ca98
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
 
 
-// ルートURLにアクセスされたときにログインページにリダイレクト
+// ルートURLにアクセスされたときにログインページにリダイレクトの分岐
 Route::get('/', function () {
-    return redirect()->route('login');  // ログインページにリダイレクト
-});
+    //ユーザーがログインしていなければログインページにリダイレクト
+    if (auth()->guest()) {
+        return redirect()->route('login');
+    }
+    //ログインしていればHomeControllerのindexメソッドを実行。
+    return app()->make(HomeController::class)->index();
+})->name('home');
+
+// ルートURLにアクセスされたときにログインページにリダイレクト
+// Route::get('/', function () {
+//     return redirect()->route('login');  // ログインページにリダイレクト
+// });
+
+
 
 // ユーザー新規登録を行った後、ユーザーの名前情報を渡しながら、登録完了画面へ
 Route::get('/register/complete', function () {
@@ -74,8 +81,30 @@ Route::post('/logout', function () {
 
 
 
-// プロフィールへのルート設定。不要なので後に削除
-// Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+//プロフィールへのルート設定。
+//authﾐﾄﾞﾙｳｪｱを指定して、ﾛｸﾞｲﾝしていないユーザーが/pforifeにアクセスできないようにする。
+Route::get('/profile', [ProfileController::class, 'profile'])->middleware('auth')->name('profile');
+
+
+// プロフィール編集ページへのルート設定
+Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profiles.edit');
+
+//編集後の更新処理を実行
+//データ更新の為putメソッドを使用。
+Route::put('/profile_Update', [ProfileController::class, 'update'])->name('profile.update');
+
+
+// フォローリストへのルート設定
+Route::get('profile/follow-list', [FollowController::class, 'follow'])->name('users.follow_list');
+
+// プロフィールページでの検索機能の実装
+Route::get('profile/show', [ProfileController::class, 'search'])->name('profiles.search');
+Route::get('profile/{id}', [ProfileController::class, 'show'])->name('profiles.show');
+
+
+//ユーザーの検索結果後のプロフィール表示ルート設定
+// Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profiles.show');
+
 
 
 
