@@ -102,11 +102,6 @@ Route::get('profile/show', [ProfileController::class, 'search'])->name('profiles
 Route::get('profile/{id}', [ProfileController::class, 'show'])->name('profiles.show');
 
 
-//ユーザーの検索結果後のプロフィール表示ルート設定
-// Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profiles.show');
-
-
-
 
 
 // //ユーザー認証に関連する一連のルートを自動的に登録するためのもの
