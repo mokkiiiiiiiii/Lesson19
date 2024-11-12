@@ -11,8 +11,17 @@
         <button type="submit">検索</button>
     </form>
 
-    <h2>ユーザーリスト</h2>
+    <div class="mb-3">
+    <form action="{{ route('follow.list') }}" method="GET" style="display: inline;">
+        <button type="submit" class="btn btn-secondary btn-sm">フォローリスト</button>
+    </form>
 
+    <form action="{{ route('follower.list') }}" method="GET" style="display: inline;">
+        <button type="submit" class="btn btn-primary btn-sm">フォロワーリスト</button>
+    </form>
+    </div>
+
+    <h2>ユーザーリスト</h2>
     @if (isset($message))
         <p>{{ $message }}</p>
     @else
