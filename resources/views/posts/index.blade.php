@@ -72,9 +72,10 @@
             <!-- $list->idが投稿id -->
 
             <td>
-              <form action="/post/{{ $list->id }}/delete" method="POST" style="display: inline;"
-                onsubmit="return confirm('こちらの投稿を削除してもよろしいでしょうか？')">
-                @csrf
+              <form action="{{ route('post.delete', ['id' => $list->id]) }}" method="POST" style="display: inline;"
+              onsubmit="return confirm('こちらの投稿を削除してもよろしいでしょうか？')">
+              @csrf
+              @method('DELETE')
                 <button type="submit" class="btn btn-danger">削除</button>
               </form>
             </td>

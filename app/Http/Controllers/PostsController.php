@@ -141,13 +141,18 @@ class PostsController extends Controller
     $keyword = $request->input('keyword');
     // キーワードが入力されている場合のみ部分一致検索を実行。contentsカラムの値が検索キーワードを含むレコードをすべて取得
     $lists = Post::where('contents', 'LIKE', '%' . $keyword . '%')->get();
+    $user = Auth::user();
 
     // 検索結果が空かどうか確認し、該当する投稿がない場合はposts.indexビューを表示し、messageという変数に「検索結果は0件です。」というメッセージを渡す
     if ($lists->isEmpty()) {
-      return view('posts.index', ['message' => '検索結果は0件です。']);
+      return view('posts.index', ['message' => '検索結果は0件です。',
+      'user' => $user
+    ]);
     }
 
     // 検索結果が存在する場合、リスト（$lists）を渡す
-    return view('posts.index', ['lists' => $lists]);
+    return view('posts.index', ['lists' => $lists,
+    'user' => $user
+  ]);
   }
 }

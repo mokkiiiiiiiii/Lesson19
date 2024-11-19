@@ -49,17 +49,28 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'bio' => 'nullable|string|max:500',
-            'profile_image' => ''
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             //画像更新処理は難しそうなので後回し中
         ]);
 
         //ログインユーザーを更新
         $user = Auth::user();
+
+        if ($request->hasFile('profile_image')) {
+        // 古い画像を削除
+        if ($user->profile_image) {
+            Storage::delete('public/' . $user->profile_image);
+        }
+
+        // 新しい画像を保存
+        $path = $request->file('profile_image')->store('profile_images', 'public');
+        $user->profile_image = $path;
+      }
         $user->name = $request->name;
         $user->bio = $request->bio;
         $user->save();
 
-        return redirect()->route('profiles.edit')->with('success', 'プロフィールが更新されました');
+        return redirect()->route('profile')->with('success', 'プロフィールが更新されました');
     }
 
 

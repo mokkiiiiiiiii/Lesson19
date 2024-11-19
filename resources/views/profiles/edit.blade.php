@@ -10,7 +10,7 @@
   </div>
   @endif
 
-  <form action="{{ route('profile.update') }}" method="POST">
+  <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -18,7 +18,8 @@
       <label for="name" class="form-label">名前</label>
       <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $user->name) }}" required>
       @error('name')
-      <div class="invalid-feedback">{{ $message }}</div>
+      <div class="invalid-feedback">{{ $message }}
+      </div>
       @enderror
     </div>
 
@@ -28,6 +29,14 @@
       @error('bio')
       <div class="invalid-feedback">{{ $message }}</div>
       @enderror
+    </div>
+
+    <div class="mb-3">
+        <label for="profile_image" class="form-label">プロフィール画像</label>
+        <input type="file" class="form-control @error('profile_image') is-invalid @enderror" id="profile_image" name="profile_image" accept="image/*">
+        @error('profile_image')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
     </div>
 
     <button type="submit" class="btn btn-primary"><a href="{{ route('profiles.edit') }}"></a>更新する</button>

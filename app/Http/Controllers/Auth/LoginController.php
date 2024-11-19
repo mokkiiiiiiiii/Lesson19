@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 //AuthenticatesUsersトレイトは、Laravelでユーザー認証を実装するための機能
 use Illuminate\Http\Request;
 //HTTPリクエストクラスの情報を操作、アクセスに使用
+use Illuminate\Support\Facades\Auth;
+
 
 class LoginController extends Controller
 //HTTPリクエストに対してどのような処理を行うかを定義
@@ -46,6 +48,7 @@ class LoginController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
 
+     
      //ログインフォームを送信したときに呼び出されるメソッド
     public function login(Request $request)
     {
@@ -61,11 +64,11 @@ class LoginController extends Controller
             'password.min' => 'パスワードは6文字以上で入力してください。',
         ]);
         // ログイン処理
-        if ($this->attemptLogin($request)) {
-            // ログイン成功後のリダイレクト
-            return redirect()->intended($this->redirectPath());
-            //上記の$redirectToプロパティで指定した indexにリダイレクト
-        }
+       if (Auth::attempt($request->only('email', 'password'))) {
+    return redirect()->route('posts.index'); // ここで直接リダイレクト先を指定
+}
+
+
 
         // ログイン失敗時の処理
         return back()->withErrors([

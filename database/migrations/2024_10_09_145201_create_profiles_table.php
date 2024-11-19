@@ -17,7 +17,8 @@ class CreateProfilesTable extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             //
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // ユーザーIDへの外部キー
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // 修正
+             // ユーザーIDへの外部キー
             $table->string('username')->unique(); // ユーザー名
             $table->text('bio')->nullable(); // 自己紹介
             $table->string('avatar')->nullable(); // アイコン画像のパス

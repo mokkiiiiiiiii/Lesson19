@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $primaryKey = 'id'; // Primary Key を 'user_id' に指定
+    protected $primaryKey = 'user_id'; // Primary Key を 'user_id' に指定
 
     /**
      * Mass-assignable attributes.
@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'user_id',
     ];
 
     /**
@@ -93,7 +94,7 @@ class User extends Authenticatable
     // ユーザーが複数の投稿を持つ関係を定義。
     public function posts()
     {
-        return $this->hasMAny(Post::class);
+        return $this->hasMAny(Post::class, 'user_id');
     }
     //     ProfileモデルでUserモデルを参照させる為に記述。
     //     hasOneは「一対一」のリレーションシップを示し、1つのユーザーが1つのプロフィールを持つことを意味する。

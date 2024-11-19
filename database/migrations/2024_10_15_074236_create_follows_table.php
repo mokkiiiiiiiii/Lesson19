@@ -20,8 +20,8 @@ class CreateFollowsTable extends Migration
             $table->unsignedBigInteger('followee_id');
             $table->timestamps();
 
-            $table->foreign('follower_id')->references('user_id')->on('users')->onDelete('cascade');
-            $table->foreign('followee_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('follower_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('followee_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->unique(['follower_id', 'followee_id']);
         });

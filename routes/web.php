@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
+//ユーザー認証に関連する一連のルートを自動的に登録するためのもの
+Auth::routes();
 
 // ルートURLにアクセスされたときにログインページにリダイレクトの分岐
 Route::get('/', function () {
@@ -55,7 +57,7 @@ Route::get('post/{id}/update-form', [PostsController::class, 'updateForm'])->nam
 Route::post('/post/update', [PostsController::class, 'update']);
 
 //特定の投稿を識別し、ボタン押下時このルートが実行される。PostsControllerのdeleteメソッドを実行するよう指定
-Route::get('post/{id}/delete', [PostsController::class, 'delete']);
+Route::delete('post/{id}/delete', [PostsController::class, 'delete'])->name('post.delete');
 
 //検索ボタン押下時このルートが実行される。PostsControllerのメソッドを実行するよう指定
 Route::get('/posts/search', [PostsController::class, 'search'])->name('posts.search');
@@ -97,16 +99,11 @@ Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profiles.e
 //データ更新の為putメソッドを使用。
 Route::put('/profile_Update', [ProfileController::class, 'update'])->name('profile.update');
 
-
 // フォローリストへのルート設定
 Route::get('profile/follow-list', [FollowController::class, 'follow'])->name('users.follow_list');
+
+Route::get('profile/follower-list', [FollowController::class, 'followerList'])->name('follower.list');
 
 // プロフィールページでの検索機能の実装
 Route::get('profile/show', [ProfileController::class, 'search'])->name('profiles.search');
 Route::get('profile/{id}', [ProfileController::class, 'show'])->name('profiles.show');
-
-
-
-
-// //ユーザー認証に関連する一連のルートを自動的に登録するためのもの
-Auth::routes();

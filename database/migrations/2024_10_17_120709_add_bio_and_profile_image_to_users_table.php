@@ -17,7 +17,7 @@ class AddBioAndProfileImageToUsersTable extends Migration
             //
             $table->text('bio')->nullable();
             // 自己紹介（nullableでNULLを許可）
-            $table->string('profile_image')->nullable;
+            $table->string('profile_image')->nullable();
             // アイコン画像のパス（nullableでNULLを許可）
         });
     }
@@ -30,8 +30,13 @@ class AddBioAndProfileImageToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
-            $table->dropColumn(['bio', 'profile_image']);
-        });
+        if (Schema::hasColumn('users', 'bio')) {
+            $table->dropColumn('bio');
+        }
+
+        if (Schema::hasColumn('users', 'profile_image')) {
+            $table->dropColumn('profile_image');
+        }
+    });
     }
 }
