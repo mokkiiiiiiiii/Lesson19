@@ -13,7 +13,9 @@ class UserController extends Controller
 {
     // ログインユーザーがいるか確認しつつ、自分以外のユーザーを取得
     if (Auth::check()) {
-        $users = User::where('user_id', '!=', Auth::user()->user_id)->get();
+        $users = User::where('user_id', '!=', Auth::user()->user_id)
+                     ->orderBy('created_at', 'desc') // 作成日時順にソート（オプション）
+                     ->get();
     } else {
         $users = collect([]); // ユーザーがいない場合は空のコレクションを返す
     }

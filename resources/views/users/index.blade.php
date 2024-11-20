@@ -37,7 +37,15 @@
                 @foreach ($users as $user)
                     @if (Auth::check() && Auth::id() !== $user->user_id)
                     <tr>
-                        <td>{{ $user->name }}</td>
+                      <td style="display: flex; align-items: center;">
+              <!-- プロフィール画像を追加 -->
+                        <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('images/default-icon.png') }}"
+                        alt=""
+                        style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                        <a href="{{ route('profiles.show', $user->user_id) }}" class="no-underline">
+                        {{ $user->name }}
+                       </td>
+                       </td>
                         <td>{{ $user->email }}</td>
                         <td>
                             @if (!Auth::user()->isFollowing($user))

@@ -24,7 +24,11 @@ class PostsController extends Controller
 
   public function index()
   {
-    $list = DB::table('posts')->get();
+    $list = DB::table('posts')
+      ->join('users', 'posts.user_id', '=', 'users.user_id') // ユーザー情報と結合
+      ->select('posts.*', 'users.name as user_name', 'users.profile_image') // 必要なフィールドを選択
+      ->orderBy('posts.created_at', 'desc') // 投稿を新しい順に並べる
+      ->get();
     //DB::table('posts')で、postsテーブルのデータを指定し、->get();でデータを取得
     $user = Auth::user();
 

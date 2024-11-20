@@ -1,29 +1,20 @@
 <!DOCTYPE html>
 
 <html>
-
-
-
 <body>
   @extends('layouts.app')
   <!-- 親テンプレートとして継承。複数のページで共通のレイアウト（layouts/app.blade.php） -->
   @section('content')
   <!-- app.balde.php内の@yield('content')で指定されている箇所に、設定したコードを反映 -->
 
-  <div class='container'>
-    <div class="profile">
-      <h2>
-        <p>{{ $user->name }}</p>
-      </h2>
-      <a class="btn btn-success" href="{{ route( 'profile' )}}">プロフィール</a>
-
-    </div>
     <div class="main">
 
-      <!-- /create-formへ -->
-      <p class="pull-right"><a class="btn btn-success" href="/create-form">投稿する</a></p>
-
       <div class='container'>
+         <div class="profile">
+         <form action="{{ route('profile') }}" method="GET" style="display: inline;">
+         <button type="submit" class="btn btn-success">プロフィール</button>
+         </form>
+         </div>
         <!-- /create-formへ -->
         <div class="d-flex justify-content-end mb-2">
           <form action="{{ route('users.index') }}" method="GET" style="display: inline;">
@@ -57,7 +48,21 @@
           @foreach ($lists as $list)
           <!-- ループの作成。$listsでコントローラーからの投稿リストを保持し、$listでここの投稿の情報にアクセス -->
           <tr>
-            <td>{{ $list->user_name }}</td>
+            <td style="display: flex; align-items: center;">
+              <!-- プロフィール画像を追加 -->
+              <img src="{{ $list->profile_image ? asset('storage/' . $list->profile_image) : asset('images/default-icon.png') }}"
+                 alt=""
+                 style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+              @if ($list->user_id !== Auth::id())
+                <!-- 他のユーザーの場合はリンクをつける -->
+              <a href="{{ route('profiles.show', $list->user_id) }}" class="no-underline">
+                {{ $list->user_name }}
+              </a>
+              @else
+                <!-- 自分の名前の場合はリンクをつけない -->
+                {{ $list->user_name }}
+              @endif
+            </td>
             <td>{{ $list->contents }}</td>
             <td>{{ $list->created_at }}</td>
             <!-- 個々の情報の表示 -->

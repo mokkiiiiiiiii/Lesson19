@@ -88,7 +88,7 @@ Route::post('/logout', function () {
 
 
 //プロフィールへのルート設定。
-//authﾐﾄﾞﾙｳｪｱを指定して、ﾛｸﾞｲﾝしていないユーザーが/pforifeにアクセスできないようにする。
+//authﾐﾄﾞﾙｳｪｱを指定して、ﾛｸﾞｲﾝしていないユーザーが/profileにアクセスできないようにする。
 Route::get('/profile', [ProfileController::class, 'profile'])->middleware('auth')->name('profile');
 
 
@@ -106,4 +106,7 @@ Route::get('profile/follower-list', [FollowController::class, 'followerList'])->
 
 // プロフィールページでの検索機能の実装
 Route::get('profile/show', [ProfileController::class, 'search'])->name('profiles.search');
+
 Route::get('profile/{id}', [ProfileController::class, 'show'])->name('profiles.show');
+
+Route::get('/user/{id}/profile', [ProfileController::class, 'show'])->name('user.profile');

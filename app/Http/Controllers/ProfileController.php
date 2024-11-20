@@ -14,7 +14,6 @@ use App\Models\User;
 
 class ProfileController extends Controller
 {
-    //
     public function profile()
     {
         $user = auth::user();
@@ -25,16 +24,12 @@ class ProfileController extends Controller
 
         $lists = $posts;
 
-
         return view('profiles.profile', compact('user', 'posts', 'lists'));
         //profile.bladeにユーザー情報を渡す。
     }
 
-
-
     //編集画面の表示
     //editメソッドで取得したユーザー情報を"profiles.edit"ビューに渡す。
-
     public function edit()
     {
         $user = Auth::user();
@@ -73,11 +68,9 @@ class ProfileController extends Controller
         return redirect()->route('profile')->with('success', 'プロフィールが更新されました');
     }
 
-
     //検索機能
     public function search(Request $request)
     {
-
         $query = $request->input('query');
         //検索クエリを取得させる
         $users = User::where('name', 'like', "%$query%")->get();
@@ -86,16 +79,17 @@ class ProfileController extends Controller
         return view('profiles.show', compact('query', 'users'));
     }
 
-
-
     // 該当ユーザーを検索し、そのユーザーのプロフィールを表示するビューにデータを渡す。
     public function show($id)
     {
-
         $user = User::findOrFail($id);
         //IDに一致するユーザーを取得する
+        $posts = $user->posts()->orderBy('created_at', 'desc')->get(); // 投稿を取得
 
-        return view('profiles.show', compact('user'));
-        //データをビューに渡す。
+        return view('profiles.show', compact('user', 'posts')); // データをビューに渡す
+
     }
+
+
+
 }

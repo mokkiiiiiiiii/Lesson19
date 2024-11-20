@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class FollowController extends Controller
 {
@@ -38,7 +40,8 @@ class FollowController extends Controller
 
     public function followerList()
     {
+        $user = Auth::user();
         $followers = Auth::user()->followers; // 自分をフォローしているユーザーを取得
-        return view('users.follower_list', compact('followers'));
+        return view('users.follower_list', compact('user','followers'));
     }
 }
