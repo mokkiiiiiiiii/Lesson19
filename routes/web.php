@@ -26,19 +26,13 @@ Route::get('/', function () {
     return app()->make(HomeController::class)->index();
 })->name('home');
 
-// ルートURLにアクセスされたときにログインページにリダイレクト
-// Route::get('/', function () {
-//     return redirect()->route('login');  // ログインページにリダイレクト
-// });
-
-
-
 // ユーザー新規登録を行った後、ユーザーの名前情報を渡しながら、登録完了画面へ
 Route::get('/register/complete', function () {
     // セッションからユーザー情報を取得
     $user = session('user');
     return view('register_complete', compact('user'));
 })->name('register.complete');
+
 
 //第一引数'index'の場合、~8000/indexを指す
 //第二引数は、リクエストが来たときに実行するcontrollerとメソッドを指定。indexにgetリクエストが来たときに、このメソッドが実行される
@@ -62,35 +56,30 @@ Route::delete('post/{id}/delete', [PostsController::class, 'delete'])->name('pos
 //検索ボタン押下時このルートが実行される。PostsControllerのメソッドを実行するよう指定
 Route::get('/posts/search', [PostsController::class, 'search'])->name('posts.search');
 
+
 //ユーザー検索ボタン押下時にユーザー検索画面(ユーザー一覧)へ遷移する
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
 //検索ボタン押下時このルートが実行される。UsersControllerのメソッドを実行するよう指定
 Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
-// フォローのアクション
+
+// フォローのアクション。フォローメソッドでuserの値を渡す
 Route::post('/follow/{user}', [FollowController::class, 'follow'])->name('follow');
 
+//フォロー解除。対象のユーザーIDが渡される。
 Route::post('/unfollow/{user}', [FollowController::class, 'unfollow'])->name('unfollow');
 
+//フォローリストの表示。データを変更しないGET
 Route::get('/follow-list', [FollowController::class, 'followList'])->name('follow.list');
 
+//フォロワーリストの表示。
 Route::get('/follower-list', [FollowController::class, 'followerList'])->name('follower.list');
-
-//postリクエストによりルートに定義された処理が実行
-//Auth::logoutで、Laravelの認証システムを使って現在ログインしているユーザーをログアウト
-//ログアウト後にユーザーを/loginページにリダイレクト
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/login');
-})->name('logout');
-
 
 
 //プロフィールへのルート設定。
 //authﾐﾄﾞﾙｳｪｱを指定して、ﾛｸﾞｲﾝしていないユーザーが/profileにアクセスできないようにする。
 Route::get('/profile', [ProfileController::class, 'profile'])->middleware('auth')->name('profile');
-
 
 // プロフィール編集ページへのルート設定
 Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profiles.edit');
@@ -107,6 +96,14 @@ Route::get('profile/follower-list', [FollowController::class, 'followerList'])->
 // プロフィールページでの検索機能の実装
 Route::get('profile/show', [ProfileController::class, 'search'])->name('profiles.search');
 
+//ユーザーそれぞれのプロフィール画面へ遷移する
 Route::get('profile/{id}', [ProfileController::class, 'show'])->name('profiles.show');
 
-Route::get('/user/{id}/profile', [ProfileController::class, 'show'])->name('user.profile');
+
+//postリクエストによりルートに定義された処理が実行
+//Auth::logoutで、Laravelの認証システムを使って現在ログインしているユーザーをログアウト
+//ログアウト後にユーザーを/loginページにリダイレクト
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');

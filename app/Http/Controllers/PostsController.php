@@ -25,20 +25,25 @@ class PostsController extends Controller
   public function index()
   {
     $list = DB::table('posts')
-      ->join('users', 'posts.user_id', '=', 'users.user_id') // ユーザー情報と結合
-      ->select('posts.*', 'users.name as user_name', 'users.profile_image') // 必要なフィールドを選択
-      ->orderBy('posts.created_at', 'desc') // 投稿を新しい順に並べる
+      //postsテーブルのuser_idカラムと、usersテーブルのuser_idカラムを結合し、投稿したユーザー情報を取得
+      ->join('users', 'posts.user_id', '=', 'users.user_id')
+      //postsテーブルのすべてのカラム（posts.*）を取得。usersテーブルのnameとprofile_imageカラムも取得。as user_nameは、users.nameをuser_nameという別名で取得し、ビューで区別。
+      ->select('posts.*', 'users.name as user_name', 'users.profile_image')
+      //投稿を作成日時（created_at）の降順に並べ替え、最新の投稿を最初に表示。
+      ->orderBy('posts.created_at', 'desc')
+      //DB::table('posts')で、postsテーブルのデータを指定し、->get();でデータを取得
       ->get();
-    //DB::table('posts')で、postsテーブルのデータを指定し、->get();でデータを取得
+
     $user = Auth::user();
 
+    //postsディレクトリの中にあるindex.blade.phpを呼び出す
     return view('posts.index', [
+      //コントローラからビューへ値を渡す。投稿一覧データ（$list）変数を"lists"という名前でビューに渡す。
       'lists' => $list,
+      // ログインしているユーザー情報をビューに渡す。
       'user' => $user
     ]);
-  }  //postsディレクトリの中にあるindex.blade.phpを呼び出す
-  //コントローラからビューへ値を渡す。$listという変数を"lists"という名前でビューに渡す。
-  // ユーザー情報をビューに渡す為追記。
+  }
 
 
   public function createForm()
@@ -80,11 +85,13 @@ class PostsController extends Controller
   public function updateForm($id)
   {
     $post = DB::table('posts')
-      ->where('id', $id)  //指定されたidを持つ投稿を検索
+      ->where('id', $id)
+       //指定されたidを持つ投稿を検索
       ->first();  //idが一致する投稿が1件だけ取得
     return view('posts.updateForm', ['post' => $post]);
     //updateFormへ。ビュー内でpostという変数を使って、特定の投稿のデータにアクセス
   }
+
 
   public function update(Request $request)
   {

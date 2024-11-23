@@ -45,7 +45,9 @@ class User extends Authenticatable
     public function followees()
     {
         return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followee_id')
-            ->distinct(); // 重複排除
+            ->distinct();
+        //followsは中間テーブル
+        // 重複排除
     }
 
 

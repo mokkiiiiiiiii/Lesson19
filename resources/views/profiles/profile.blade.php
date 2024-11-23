@@ -17,7 +17,7 @@
 
   <div class="mb-3">
     <form action="{{ route('follow.list') }}" method="GET" style="display: inline;">
-        <button type="submit" class="btn btn-secondary btn-sm">フォローリスト</button>
+        <button type="submit" class="btn btn-success btn-sm">フォローリスト</button>
     </form>
 
     <form action="{{ route('follower.list') }}" method="GET" style="display: inline;">

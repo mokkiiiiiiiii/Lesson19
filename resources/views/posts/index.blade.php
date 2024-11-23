@@ -12,7 +12,7 @@
       <div class='container'>
          <div class="profile">
          <form action="{{ route('profile') }}" method="GET" style="display: inline;">
-         <button type="submit" class="btn btn-success">プロフィール</button>
+         <button type="submit" class="btn btn-default">プロフィール</button>
          </form>
          </div>
         <!-- /create-formへ -->
