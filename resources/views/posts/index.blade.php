@@ -11,6 +11,7 @@
 
       <div class='container'>
          <div class="profile">
+          <!-- /profileへ -->
          <form action="{{ route('profile') }}" method="GET" style="display: inline;">
          <button type="submit" class="btn btn-default">プロフィール</button>
          </form>
@@ -50,11 +51,13 @@
           <tr>
             <td style="display: flex; align-items: center;">
               <!-- プロフィール画像を追加 -->
-              <img src="{{ $list->profile_image ? asset('storage/' . $list->profile_image) : asset('images/default-icon.png') }}"
+              <!-- 画像が設定されていなければ、デフォルトの画像を使用 -->
+              <img src="{{ $list->profile_image ? asset('storage/' .
+               $list->profile_image) : asset('images/default-icon.png') }}"
                  alt=""
                  style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
               @if ($list->user_id !== Auth::id())
-                <!-- 他のユーザーの場合はリンクをつける -->
+                <!-- ログインユーザー以外はプロフィール画面へのリンクをつける -->
               <a href="{{ route('profiles.show', $list->user_id) }}" class="no-underline">
                 {{ $list->user_name }}
               </a>

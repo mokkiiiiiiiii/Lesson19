@@ -17,11 +17,12 @@ class UserController extends Controller
     // ログインユーザーがいるか確認しつつ、自分以外のユーザーを取得
     if (Auth::check()) {
         $users = User::where('user_id', '!=', Auth::user()->user_id)
-                    ->orderBy('created_at', 'desc') // 作成日時順にソート（オプション）
+                    ->orderBy('created_at', 'desc')
+                    // 作成日時順にソート（オプション）
                      ->get();
     } else {
         $users = collect([]);
-        // ユーザーがいない場合は空のコレクションを返す
+        //ログインしていない場合、空のコレクション（collect([])) を返す。これにより、エラー発生を抑える。
     }
     return view('users.index', compact('users'));
   }
@@ -32,8 +33,12 @@ class UserController extends Controller
   {
     $follower = Auth::user();
 
+    //ログインユーザーが既にフォローしていない場合のみフォロー処理を実行
     if (!$follower->isFollowing($user)) {
-        $follower->followees()->attach($user->user_id);
+      //followees:ログインユーザーがフォローしているユーザーを表すリレーション（belongsToMany)
+        $follower->followees()->attach
+        //中間テーブル（followsテーブル）にフォロー関係を追加
+        ($user->user_id);
     }
     // フォローリスト画面にリダイレクト
     return redirect()->route('follow.list');
@@ -44,11 +49,11 @@ class UserController extends Controller
     public function followList()
   {
      $followees = Auth::user()->followees()->distinct()->get();
-     // フォローしているユーザーを取得
+     //distinct():重複を除外して、フォローしているユーザーを取得
      return view('users.follow_list', compact('followees'));
   }
 
-  
+
     // ユーザー検索
     public function search(Request $request)
   {

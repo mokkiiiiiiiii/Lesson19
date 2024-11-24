@@ -31,7 +31,6 @@
             @foreach ($followees as $followee)
                 <tr>
                     <td style="display: flex; align-items: center;">
-              <!-- プロフィール画像を追加 -->
                         <img src="{{ $followee->profile_image ? asset('storage/' . $followee->profile_image) : asset('images/default-icon.png') }}"
                         alt=""
                         style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
