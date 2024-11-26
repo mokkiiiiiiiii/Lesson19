@@ -38,6 +38,22 @@
                         </a>
                       </td>
                     <td>{{ $follower->email }}</td>
+                    <td>
+              {{-- フォロー済みか判定 --}}
+              @if (!in_array($follower->user_id, $followedUserIds))
+                  {{-- フォローボタン --}}
+                  <form action="{{ route('follow', ['user' => $follower->user_id]) }}" method="POST" style="display: inline;">
+                      @csrf
+                      <button type="submit" class="btn btn-primary btn-sm">フォローする</button>
+                  </form>
+              @else
+                  {{-- フォロー解除ボタン --}}
+                  <form action="{{ route('unfollow', ['user' => $follower->user_id]) }}" method="POST" style="display: inline;">
+                      @csrf
+                      <button type="submit" class="btn btn-danger btn-sm">フォロー解除</button>
+                  </form>
+              @endif
+          </td>
                 </tr>
           @endforeach
         </tbody>

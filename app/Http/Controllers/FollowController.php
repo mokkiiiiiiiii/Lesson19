@@ -53,11 +53,17 @@ class FollowController extends Controller
 
 
     public function followerList()
-    {
-        $user = Auth::user();
-        $followers = Auth::user()->followers;
-        // 自分をフォローしているユーザーを取得
-        return view('users.follower_list', compact('user','followers'));
-        //ログインユーザーとフォロワーリストをビューに渡し、フォロワーリストを表示
-    }
+{
+    $user = Auth::user(); // ログイン中のユーザー
+
+    // 自分をフォローしているユーザーを取得
+    $followers = $user->followers;
+
+    // ログインユーザーがすでにフォローしているユーザーIDのリストを取得
+    $followedUserIds = $user->followees()->pluck('user_id')->toArray();
+
+    // ビューにデータを渡す
+    return view('users.follower_list', compact('user', 'followers', 'followedUserIds'));
+}
+
 }

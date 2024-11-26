@@ -55,6 +55,12 @@
                   </form>
                   @else
                   <span class="text-muted">フォロー済み</span>
+                  <td>
+                    <form action="{{ route('unfollow', ['user' => $user->user_id]) }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="btn btn-danger btn-sm">解除</button>
+                    </form>
+                  </td>
                   @endif
                 </td>
               </tr>
