@@ -54,6 +54,12 @@ class UserController extends Controller
   }
 
 
+  public function isFollowing(User $user)
+  {
+    return $this->followees()->where('user_id', $user->user_id)->exists();
+  }
+
+
   // ユーザー検索
   public function search(Request $request)
   {
