@@ -22,9 +22,9 @@ Route::get('/', function () {
     if (auth()->guest()) {
         return redirect()->route('login');
     }
-    //ログインしていればHomeControllerのindexメソッドを実行。
-    return app()->make(HomeController::class)->index();
-})->name('home');
+    //ログインしていれば投稿一覧へ。
+    return redirect()->route('posts.index');
+    })->name('home');
 
 // ユーザー新規登録を行った後、ユーザーの名前情報を渡しながら、登録完了画面へ
 Route::get('/register/complete', function () {

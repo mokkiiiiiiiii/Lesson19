@@ -28,9 +28,9 @@ class HomeController extends Controller
 
         $user = Auth::user();
         // 認証ユーザーを取得。
-
         $posts = $user->posts()->get();
+        $lists = $posts;
 
-        return view('home.index', compact('user', 'posts'));
+        return view('posts.index', compact('user', 'posts','lists'));
     }
 }
