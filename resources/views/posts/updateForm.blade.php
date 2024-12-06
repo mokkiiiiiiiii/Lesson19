@@ -27,6 +27,13 @@
              class...inputタグに適用されるcssクラス -->
       </div>
 
+      @error('upPost')
+  <!-- バリデーションエラーがある場合にメッセージを表示 -->
+  <span class="invalid-feedback" role="alert">
+    <strong>{{ $message }}</strong>
+  </span>
+  @enderror
+
       <button type="submit" class="btn btn-primary pull-right">更新</button>
       {!! Form::close() !!}
     </div>

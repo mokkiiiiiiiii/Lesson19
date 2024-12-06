@@ -24,6 +24,19 @@
     </div>
 
     <div class="mb-3">
+  <label for="password" class="form-label">新しいパスワード</label>
+  <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" autocomplete="new-password">
+  @error('password')
+  <div class="invalid-feedback">{{ $message }}</div>
+  @enderror
+</div>
+
+<div class="mb-3">
+  <label for="password_confirmation" class="form-label">新しいパスワード（確認）</label>
+  <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password">
+</div>
+
+    <div class="mb-3">
       <label for="bio" class="form-label">自己紹介</label>
       <textarea class="form-control @error('bio') is-invalid @enderror" id="bio" name="bio" rows="3">{{ old('bio', $user->bio) }}</textarea>
       @error('bio')

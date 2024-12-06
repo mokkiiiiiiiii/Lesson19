@@ -30,6 +30,13 @@
      class...inputタグに適用されるcssクラス
      placeholder...入力フィールドが空のときに表示されるガイドテキストを指定-->
 
+     @error('newPost')
+  <!-- バリデーションエラーがある場合にメッセージを表示 -->
+  <span class="invalid-feedback" role="alert">
+    <strong>{{ $message }}</strong>
+  </span>
+  @enderror
+  
 <button type="submit" class="btn btn-success pull-right">投稿する</button>
 
 {!! Form::close() !!}

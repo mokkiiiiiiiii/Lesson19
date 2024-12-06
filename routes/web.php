@@ -88,11 +88,6 @@ Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profiles.e
 //データ更新の為putメソッドを使用。
 Route::put('/profile_Update', [ProfileController::class, 'update'])->name('profile.update');
 
-// フォローリストへのルート設定
-Route::get('profile/follow-list', [FollowController::class, 'follow'])->name('users.follow_list');
-
-Route::get('profile/follower-list', [FollowController::class, 'followerList'])->name('follower.list');
-
 // プロフィールページでの検索機能の実装
 Route::get('profile/show', [ProfileController::class, 'search'])->name('profiles.search');
 

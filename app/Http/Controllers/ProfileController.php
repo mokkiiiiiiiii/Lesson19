@@ -42,11 +42,24 @@ class ProfileController extends Controller
     {
         //バリデーション
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|regex:/^(?![\s　]*$).+$/u',
+            'password' => 'nullable|string|min:6|confirmed',
             'bio' => 'nullable|string|max:500',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            //画像更新処理は難しそうなので後回し中
-        ]);
+        ], [
+            'name.required' => '名前は必須項目です。',
+            'name.string' => '有効な名前を入力してください。',
+            'name.max' => '名前は最大255文字です。',
+            'name.regex' => '名前にスペースのみを入力することはできません。',
+            'password.required' => 'パスワードは必須項目です。',
+            'password.min' => 'パスワードは6文字以上で入力してください。',
+            'password.confirmed' => 'パスワードが一致しません。',
+            'bio.string' => '有効な文字を入力してください。',
+            'bio.max:500' => '500文字以内で入力してください。',
+            'profiles_image.image' => '有効な画像を入力してください。',
+            'profiles_image.mimes:jpeg,png,jpg,gif' => '有効なファイル形式を入力してください。',
+            'profiles_image.max:2048' => 'ファイルサイズがオーバーしています。',
+      ]);
 
         //ログインユーザーを更新
         $user = Auth::user();
@@ -63,6 +76,10 @@ class ProfileController extends Controller
       }
         $user->name = $request->name;
         $user->bio = $request->bio;
+
+        if ($request->filled('password')) {
+        $user->password = bcrypt($request->password); // パスワードをハッシュ化して保存
+    }
         $user->save();
 
         return redirect()->route('profile')->with('success', 'プロフィールが更新されました');

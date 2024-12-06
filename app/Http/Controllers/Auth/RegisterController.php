@@ -36,6 +36,7 @@ class RegisterController extends Controller
     //既存のregisterメソッドをオーバーライドして自動ログインを防ぐ
     public function register(Request $request)
     {
+
         $this->validator($request->all())->validate();//入力されたデータをバリデーション（検証）
 
         $user = $this->create($request->all());
@@ -79,13 +80,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255','regex:/^(?![\s　]*$).+$/u'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             ], [
             'name.required' => '名前は必須項目です。',
             'name.string' => '有効な名前を入力してください。',
             'name.max' => '名前は最大255文字です。',
+            'name.regex' => '名前にスペースのみを入力することはできません。',
             'email.required' => 'メールアドレスは必須項目です。',
             'email.email' => '有効なメールアドレスを入力してください。',
             'email.unique' => 'このメールアドレスは既に登録されています。',

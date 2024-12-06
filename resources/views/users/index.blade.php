@@ -24,7 +24,9 @@
      <h2>ユーザーリスト</h2>
      @if (isset($message))
         <p>{{ $message }}</p>
-     @else
+     @endif
+
+     @if (isset($users) && !$users->isEmpty())
         <table class='table table-hover'>
             <thead>
               <tr>

@@ -72,9 +72,12 @@ class UserController extends Controller
       ->get();
     // 検索結果が空の場合
     if ($users->isEmpty()) {
-      return view('users.index', ['message' => '検索結果は0件です。']);
+        $message = "「{$keyword}」の検索結果は0件です。";
+        return view('users.index', compact('message', 'keyword'));
     }
-    // 検索結果をビューに渡す
-    return view('users.index', compact('users'));
-  }
+
+    // 検索結果がある場合
+     $message = "「{$keyword}」の検索結果";
+    return view('users.index', compact('users','message', 'keyword'));
+}
 }

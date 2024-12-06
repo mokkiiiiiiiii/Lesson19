@@ -58,13 +58,13 @@ class PostsController extends Controller
       'newPost' => [
         'required',  //入力必須
         'string',  //文字列
-        'max:100',  //100文字以内
-        'regex:/\S+/',  // スペースのみの入力を無効
+        'max:150',  //100文字以内
+        'regex:/^(?![\s　]*$).+/u',  // スペースのみの入力を無効
       ],
     ], [
-      'contents.required' => '投稿内容は必須項目です。',
-      'contents.max' => '投稿内容は100文字以内で入力してください。',
-      'upPost.regex' => '投稿内容には空白以外の文字を含めてください。',
+      'newPost.required' => '投稿内容は必須項目です。',
+      'newPost.max' => '投稿内容は150文字以内で入力してください。',
+      'newPost.regex' => '投稿内容には空白以外の文字を含めてください。',
     ]);
     //ユーザーが入力した投稿内容を取得、取得されたデータは $post変数に格納
     $post = $request->input('newPost');
@@ -102,12 +102,12 @@ class PostsController extends Controller
       'upPost' => [
         'required',  //入力必須
         'string',  //文字列
-        'max:100',  //100文字以内
-        'regex:/\S+/',  // スペースのみの入力を無効
+        'max:150',  //100文字以内
+        'regex:/^(?![\s　]*$).+/u',  // スペースのみの入力を無効
       ],
     ], [
       'upPost.required' => '投稿内容は必須項目です。',
-      'upPost.max' => '投稿内容は100文字以内で入力してください。',
+      'upPost.max' => '投稿内容は150文字以内で入力してください。',
       'upPost.regex' => '投稿内容には空白以外の文字を含めてください。',
     ]);
 
