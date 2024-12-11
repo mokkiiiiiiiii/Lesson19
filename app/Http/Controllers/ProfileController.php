@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 //UserModelにアクセス
 
+use Illuminate\Support\Facades\Hash;
+
 
 class ProfileController extends Controller
 {
@@ -27,6 +29,36 @@ class ProfileController extends Controller
         return view('profiles.profile', compact('user', 'posts', 'lists'));
         //profile.bladeにユーザー情報を渡す。
     }
+
+
+    public function verifyPasswordForm()
+    {
+    return view('profiles.verifyPassword');
+    }
+
+    public function verifyPassword(Request $request)
+{
+    // バリデーション
+    $request->validate([
+        'password' => 'required|string',
+    ]);
+
+    $user = Auth::user();
+
+    // パスワードが一致しない場合、エラーメッセージを返す
+    if (!Hash::check($request->password, $user->password)) {
+        return redirect()->route('profile.verify.password')
+            ->withErrors(['password' => 'パスワードが正しくありません。']);
+    }
+
+    // セッションにパスワード確認済みフラグを設定
+    session(['password_verified' => true]);
+
+    // 編集画面にリダイレクトし、フラグを一度だけ使用するためのマーカーを設定
+    return redirect()->route('profiles.edit')
+        ->with('password_verified_once', true); // 一度限りのフラグ
+}
+
 
     //編集画面の表示
     //editメソッドで取得したユーザー情報を"profiles.edit"ビューに渡す。
@@ -81,6 +113,9 @@ class ProfileController extends Controller
         $user->password = bcrypt($request->password); // パスワードをハッシュ化して保存
     }
         $user->save();
+
+        session(['password_verified' => false]);
+        logger()->info('Session after profile update: ' . json_encode(session()->all()));
 
         return redirect()->route('profile')->with('success', 'プロフィールが更新されました');
     }

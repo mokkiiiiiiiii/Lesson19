@@ -58,7 +58,7 @@ class PostsController extends Controller
       'newPost' => [
         'required',  //入力必須
         'string',  //文字列
-        'max:150',  //100文字以内
+        'max:150',  //150文字以内
         'regex:/^(?![\s　]*$).+/u',  // スペースのみの入力を無効
       ],
     ], [

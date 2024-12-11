@@ -81,8 +81,17 @@ Route::get('/follower-list', [FollowController::class, 'followerList'])->name('f
 //authﾐﾄﾞﾙｳｪｱを指定して、ﾛｸﾞｲﾝしていないユーザーが/profileにアクセスできないようにする。
 Route::get('/profile', [ProfileController::class, 'profile'])->middleware('auth')->name('profile');
 
+// パスワード確認画面
+Route::get('/profile/verify-password', [ProfileController::class, 'verifyPasswordForm'])->name('profile.verify.password');
+
+// パスワード確認処理
+Route::post('/profile/verify-password', [ProfileController::class, 'verifyPassword'])->name('profile.verify.password.post');
+
 // プロフィール編集ページへのルート設定
-Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profiles.edit');
+Route::get('/profile/edit', [ProfileController::class, 'edit'])
+    ->middleware(['verifiedPassword', 'disableCache'])
+    ->name('profiles.edit');
+
 
 //編集後の更新処理を実行
 //データ更新の為putメソッドを使用。
