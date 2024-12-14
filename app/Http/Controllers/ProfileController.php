@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 //HTTPリクエストクラスの情報を操作、アクセスに使用
-
 use Illuminate\Support\Facades\Auth;
 //認証システムへのアクセス
-
 use App\Models\User;
 //UserModelにアクセス
-
 use Illuminate\Support\Facades\Hash;
+//パスワードハッシュ化やハッシュ検証(ユーザーが入力したパスワードが一致するか)を行うためのファサード
 
 
 class ProfileController extends Controller
@@ -32,6 +30,7 @@ class ProfileController extends Controller
 
 
     public function verifyPasswordForm()
+    //パスワード確認フォームの表示処理
     {
     return view('profiles.verifyPassword');
     }
@@ -41,6 +40,7 @@ class ProfileController extends Controller
     // バリデーション
     $request->validate([
         'password' => 'required|string',
+        // フィールドが必須で文字列であることをチェック
     ]);
 
     $user = Auth::user();
@@ -51,14 +51,16 @@ class ProfileController extends Controller
             ->withErrors(['password' => 'パスワードが正しくありません。']);
     }
 
-    // セッションにパスワード確認済みフラグを設定
+    // 正しいパスワードを入力した場合にこのフラグを設定。現在のユーザーがパスワード確認を完了したことを示す
     session(['password_verified' => true]);
 
-    // 編集画面にリダイレクトし、フラグを一度だけ使用するためのマーカーを設定
+    // 確認済みの状態で編集画面にリダイレクトし、フラグを一度だけ使用するためのマーカーを設定
     return redirect()->route('profiles.edit')
-        ->with('password_verified_once', true); // 一度限りのフラグ
+        ->with('password_verified_once', true);
+        // with() メソッド:一時的なデータ（フラッシュデータ）をセッションに保存します。このデータは次のリクエストで利用可能で、それ以降は破棄
+        //password_verified_once:キー名であり、このキーで一時的なデータにアクセス
+        //true:保存する値で、ここでは「パスワード確認済みであること」を示すフラグとして true を設定
 }
-
 
     //編集画面の表示
     //editメソッドで取得したユーザー情報を"profiles.edit"ビューに渡す。
@@ -141,7 +143,4 @@ class ProfileController extends Controller
         return view('profiles.show', compact('user', 'posts')); // データをビューに渡す
 
     }
-
-
-
 }

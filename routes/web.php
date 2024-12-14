@@ -1,15 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostsController;
 
+use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ProfileController;
-
 use App\Http\Controllers\HomeController;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -26,12 +25,14 @@ Route::get('/', function () {
     return redirect()->route('posts.index');
     })->name('home');
 
+
 // ユーザー新規登録を行った後、ユーザーの名前情報を渡しながら、登録完了画面へ
 Route::get('/register/complete', function () {
     // セッションからユーザー情報を取得
     $user = session('user');
     return view('register_complete', compact('user'));
 })->name('register.complete');
+
 
 
 //第一引数'index'の場合、~8000/indexを指す
@@ -57,11 +58,13 @@ Route::delete('post/{id}/delete', [PostsController::class, 'delete'])->name('pos
 Route::get('/posts/search', [PostsController::class, 'search'])->name('posts.search');
 
 
+
 //ユーザー検索ボタン押下時にユーザー検索画面(ユーザー一覧)へ遷移する
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
 //検索ボタン押下時このルートが実行される。UsersControllerのメソッドを実行するよう指定
 Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+
 
 
 // フォローのアクション。フォローメソッドでuserの値を渡す
@@ -77,21 +80,23 @@ Route::get('/follow-list', [FollowController::class, 'followList'])->name('follo
 Route::get('/follower-list', [FollowController::class, 'followerList'])->name('follower.list');
 
 
+
 //プロフィールへのルート設定。
 //authﾐﾄﾞﾙｳｪｱを指定して、ﾛｸﾞｲﾝしていないユーザーが/profileにアクセスできないようにする。
 Route::get('/profile', [ProfileController::class, 'profile'])->middleware('auth')->name('profile');
 
-// パスワード確認画面
+// 編集画面へ行く前に、パスワード確認画面へ
 Route::get('/profile/verify-password', [ProfileController::class, 'verifyPasswordForm'])->name('profile.verify.password');
 
 // パスワード確認処理
 Route::post('/profile/verify-password', [ProfileController::class, 'verifyPassword'])->name('profile.verify.password.post');
 
 // プロフィール編集ページへのルート設定
+//kernel.php。パスワード確認済みかチェック
+//同じく。キャッシュを無効化
 Route::get('/profile/edit', [ProfileController::class, 'edit'])
     ->middleware(['verifiedPassword', 'disableCache'])
     ->name('profiles.edit');
-
 
 //編集後の更新処理を実行
 //データ更新の為putメソッドを使用。
@@ -102,6 +107,7 @@ Route::get('profile/show', [ProfileController::class, 'search'])->name('profiles
 
 //ユーザーそれぞれのプロフィール画面へ遷移する
 Route::get('profile/{id}', [ProfileController::class, 'show'])->name('profiles.show');
+
 
 
 //postリクエストによりルートに定義された処理が実行

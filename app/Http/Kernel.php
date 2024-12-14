@@ -64,9 +64,12 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'verifiedPassword' => \App\Http\Middleware\VerifyPasswordMiddleware::class,
+        //キー名: 'verifiedPassword'
+        //クラス: \App\Http\Middleware\VerifyPasswordMiddleware::class
+        //特定のルートにアクセスする前に、パスワード確認済みかどうかをチェック。セッションに password_verified フラグを保存して確認。未確認の場合、パスワード確認画面にリダイレクト。
         'disableCache' => \App\Http\Middleware\DisableCacheMiddleware::class,
-
-
-
+　　　　　//キー名: 'disableCache'
+        //クラス: \App\Http\Middleware\DisableCacheMiddleware::class
+        //このミドルウェアは、ブラウザやプロキシのキャッシュを無効化するためのヘッダーをレスポンスに追加。編集画面や認証画面で古い情報がキャッシュされるのを防ぐために使用
     ];
 }

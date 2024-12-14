@@ -16,10 +16,12 @@
   <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('images/default-icon.png') }}" alt="アイコン" width="100" height="100">
 
   <div class="mb-3">
+    <!-- フォローリストの表示 -->
     <form action="{{ route('follow.list') }}" method="GET" style="display: inline;">
         <button type="submit" class="btn btn-success btn-sm">フォローリスト</button>
     </form>
 
+    <!-- フォロワーリストの表示 -->
     <form action="{{ route('follower.list') }}" method="GET" style="display: inline;">
         <button type="submit" class="btn btn-primary btn-sm">フォロワーリスト</button>
     </form>
