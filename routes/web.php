@@ -29,6 +29,7 @@ Route::get('/', function () {
 // ユーザー新規登録を行った後、ユーザーの名前情報を渡しながら、登録完了画面へ
 Route::get('/register/complete', function () {
     // セッションからユーザー情報を取得
+    //セッションは、サーバー側でユーザーごとの一時的なデータを保存する仕組み。リクエスト間でデータを保持し、同じユーザーの状態を追跡することが可能。
     $user = session('user');
     return view('register_complete', compact('user'));
 })->name('register.complete');

@@ -1,5 +1,5 @@
 <?php
-
+//アプリケーション全体のミドルウェアの登録や管理を行う中心的なファイル
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -68,7 +68,7 @@ class Kernel extends HttpKernel
         //クラス: \App\Http\Middleware\VerifyPasswordMiddleware::class
         //特定のルートにアクセスする前に、パスワード確認済みかどうかをチェック。セッションに password_verified フラグを保存して確認。未確認の場合、パスワード確認画面にリダイレクト。
         'disableCache' => \App\Http\Middleware\DisableCacheMiddleware::class,
-　　　　　//キー名: 'disableCache'
+        //キー名: 'disableCache'
         //クラス: \App\Http\Middleware\DisableCacheMiddleware::class
         //このミドルウェアは、ブラウザやプロキシのキャッシュを無効化するためのヘッダーをレスポンスに追加。編集画面や認証画面で古い情報がキャッシュされるのを防ぐために使用
     ];

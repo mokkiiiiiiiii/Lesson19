@@ -45,6 +45,8 @@ class ProfileController extends Controller
 
     $user = Auth::user();
 
+    //Hash::check():1つ目の引数に、リクエストされたパスワード
+    //2つ目の引数に、ユーザーのハッシュ化されたパスワード。リクエストされたパスワードが正しいかどうかを確認
     // パスワードが一致しない場合、エラーメッセージを返す
     if (!Hash::check($request->password, $user->password)) {
         return redirect()->route('profile.verify.password')
@@ -54,12 +56,12 @@ class ProfileController extends Controller
     // 正しいパスワードを入力した場合にこのフラグを設定。現在のユーザーがパスワード確認を完了したことを示す
     session(['password_verified' => true]);
 
-    // 確認済みの状態で編集画面にリダイレクトし、フラグを一度だけ使用するためのマーカーを設定
+    // 確認済みの状態で編集画面にリダイレクト
     return redirect()->route('profiles.edit')
         ->with('password_verified_once', true);
-        // with() メソッド:一時的なデータ（フラッシュデータ）をセッションに保存します。このデータは次のリクエストで利用可能で、それ以降は破棄
+        //with()メソッド:一時的なデータ（フラッシュデータ）をセッションに保存します。このデータは次のリクエストで利用可能で、それ以降は破棄
         //password_verified_once:キー名であり、このキーで一時的なデータにアクセス
-        //true:保存する値で、ここでは「パスワード確認済みであること」を示すフラグとして true を設定
+        //true:保存する値で、ここでは「パスワード確認済みであること」を示すフラグとして trueを設定
 }
 
     //編集画面の表示
@@ -99,25 +101,32 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         if ($request->hasFile('profile_image')) {
-        // 古い画像を削除
+        //hasFile:新しい画像がアップロードされた場合のみ処理を行います
         if ($user->profile_image) {
             Storage::delete('public/' . $user->profile_image);
+            //ユーザーに既存の画像がある場合、それを削除
         }
 
         // 新しい画像を保存
         $path = $request->file('profile_image')->store('profile_images', 'public');
         $user->profile_image = $path;
+        //新しい画像を保存し、そのパスをユーザーのprofile_imageフィールドに設定
+        //store()メソッド:ファイルを指定したディスク（ストレージ）に保存。引数で保存先ディレクトリとストレージディスクを指定
+        //保存されたファイルのパスを、$userオブジェクトのprofile_imageプロパティに代入
       }
         $user->name = $request->name;
         $user->bio = $request->bio;
 
         if ($request->filled('password')) {
-        $user->password = bcrypt($request->password); // パスワードをハッシュ化して保存
+        $user->password = bcrypt($request->password);
+        //パスワードが入力されている場合のみ処理
+        //bcrypt:パスワードをハッシュ化して保存
     }
         $user->save();
 
         session(['password_verified' => false]);
-        logger()->info('Session after profile update: ' . json_encode(session()->all()));
+        //プロフィール更新後、password_verifiedフラグをリセット。これにより次回編集時には再度パスワード確認が必要
+        //logger:更新後のセッション内容をログに記録
 
         return redirect()->route('profile')->with('success', 'プロフィールが更新されました');
     }

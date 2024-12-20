@@ -58,16 +58,4 @@
     @endforeach
   </table>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
 @endsection

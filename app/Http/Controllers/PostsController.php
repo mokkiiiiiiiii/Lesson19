@@ -59,7 +59,10 @@ class PostsController extends Controller
         'required',  //入力必須
         'string',  //文字列
         'max:150',  //150文字以内
-        'regex:/^(?![\s　]*$).+/u',  // スペースのみの入力を無効
+        'regex:/^(?![\s　]*$).+/u',
+        // ^(?![\s　]*$)・・・入力文字列が「空白文字のみではない」ことを確認。
+        //.+・・・1文字以上の内容」が存在
+        ///u・・・UTF-8モード指定。文字を正しく処理
       ],
     ], [
       'newPost.required' => '投稿内容は必須項目です。',
@@ -73,6 +76,7 @@ class PostsController extends Controller
     DB::table('posts')->insert([
       'contents' => $post,
       'user_name' => Auth::user()->name,
+      //現在ログイン中のユーザーの情報、Userモデルの nameプロパティを取得
       'user_id' => Auth::id(),
       'created_at' => now(),
       'updated_at' => now(),
@@ -87,7 +91,7 @@ class PostsController extends Controller
     $post = DB::table('posts')
       ->where('id', $id)
        //指定されたidを持つ投稿を検索
-      ->first();  //idが一致する投稿が1件だけ取得
+      ->first();  //idが一致する投稿を1件だけ取得
     return view('posts.updateForm', ['post' => $post]);
     //updateFormへ。ビュー内でpostという変数を使って、特定の投稿のデータにアクセス
   }
@@ -96,14 +100,15 @@ class PostsController extends Controller
   public function update(Request $request)
   {
     $id = $request->input('id');
+    //HTTP リクエストから送信された id の値を取得して変数 $id に格納する
 
     //upPostフィールドが以下の条件を満たしているかチェック
     $request->validate([
       'upPost' => [
         'required',  //入力必須
         'string',  //文字列
-        'max:150',  //100文字以内
-        'regex:/^(?![\s　]*$).+/u',  // スペースのみの入力を無効
+        'max:150',  //150文字以内
+        'regex:/^(?![\s　]*$).+/u',  //上記に同じ
       ],
     ], [
       'upPost.required' => '投稿内容は必須項目です。',
@@ -115,16 +120,22 @@ class PostsController extends Controller
     $up_post = $request->input('upPost');
 
     $post = DB::table('posts')->where('id', $id)->first();
+    //id カラムが $id変数の値に一致するレコードを検索する条件を設定
 
-    if (!$post || $post->user_id !== Auth::id()) {  // ログインユーザーが投稿の作成者であるか確認
-      abort(403, 'Unauthorized action.');  // 権限がない場合は403エラー
+    if (!$post || $post->user_id !== Auth::id()) {
+      // ログインユーザーが投稿の作成者であるか確認
+      //!$post・・・否定。投稿が見つからなかった場合(nullかfalse)
+      abort(403, 'Unauthorized action.');
+      // 権限がない場合は403エラー
     }
 
     DB::table('posts')
-      ->where('id', $id)  //指定されたidを持つ投稿を検索
+      ->where('id', $id)
+      //指定されたidを持つ投稿を検索
       ->update(
         ['contents' => $up_post]
-      );  //contentsカラムが、フォームで入力した新しい内容（$up_post）に更新される
+      );
+      //contentsカラムが、フォームで入力した新しい内容（$up_post）に更新される
     return redirect('/index');
   }
 

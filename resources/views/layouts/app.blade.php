@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
+     <!-- Laravelのセキュリティ機能の一環で、CSRF（クロスサイトリクエストフォージェリ）攻撃を防ぐために使用 -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'オリジナルSNSサイト') }}</title>
@@ -23,10 +24,12 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
+                <!-- タイトル。押下した場合posts.indexに遷移 -->
                 <a class="navbar-brand" href="{{ route('posts.index') }}">
                   {{ config('app.name', 'オリジナルSNSサイト') }}
                 </a>
 
+                <!-- ナビゲーションバー -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -34,12 +37,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
+                        <!-- 未認証ユーザー向け表示 -->
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -53,6 +55,7 @@
                                 </li>
                             @endif
                         @else
+                        <!-- 認証ユーザー向け表示 -->
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -75,7 +78,6 @@
                 </div>
             </div>
         </nav>
-
         <main class="py-4">
             @yield('content')
         </main>
